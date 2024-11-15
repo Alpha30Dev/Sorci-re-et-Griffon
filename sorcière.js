@@ -18,9 +18,13 @@ const positionGrimoire = 51;
 let inGame = true
 let nextCharacters = "Sorciere";
 function finDePartie() {
-    if (positionSorciere >= positionGrimoire || positionGriffon <= 0) {
+    if (positionSorciere >= positionGrimoire) {
         inGame = false;
-        console.log (nextCharacters, "Remporte la Victoire!")
+        console.log ("La sorcière a gagné");
+    }
+    else if (positionGriffon <= 0){
+        console.log ("Le griffon a gagné");
+        inGame = false;
     }
 }
 function switchCharacter(){
@@ -38,27 +42,29 @@ function rollDice() {
 function sorciereDeplacement(){
     let deplacement = rollDice();
     positionSorciere += deplacement;
-    console.log (`La sorcière avance de ${deplacement} cases et arrive sur la case ${positionSorciere}`);
     if (positionSorciere >= positionGriffon) {
-      console.log("La sorcière est arrivée sur la case du griffon elle s'arrete et tire une carte chance");
-      let ChanceCard = Math.random() < 0.5;
-      if (ChanceCard) {
-          console.log("La sorcière tire la carte de recul ! le griffon recule donc de 3 cases");
-          positionGriffon -= 3;
-      } else {
-          console.log("La sorcière tire la carte fuite lui permetant d'avancer d'une case!");
-          positionSorciere += 1;
-      }
-  }
+        console.log("La sorcière est arrivée sur la case du griffon elle s'arrete et tire une carte chance");
+        positionSorciere = positionGriffon;
+        let ChanceCard = Math.random() < 0.5;
+        if (ChanceCard) {
+            console.log("La sorcière tire la carte de recul ! le griffon recule donc de 3 cases");
+            positionGriffon += 3;
+        } else {
+            console.log("La sorcière tire la carte fuite lui permetant d'avancer d'une case!");
+            positionSorciere += 1;
+        }
+    }
+  console.log (`La sorcière avance de ${deplacement} cases et arrive sur la case ${positionSorciere}`);
   return positionSorciere;
 }
 function griffonDeplacement() {
   let deplacement = rollDice();
   positionGriffon -= deplacement;
-  console.log(`Le griffon avance de ${deplacement} cases et arrive sur la case ${positionGriffon}`);
+  
   
   if (positionGriffon <= positionSorciere) {
       console.log("Le griffon est arrivé sur la case de la sorcière! La sorcière doit lancer le dé");
+      positionGriffon = positionSorciere;
       let déNombre = rollDice();
       
       if (déNombre > 3) {
@@ -76,6 +82,7 @@ function griffonDeplacement() {
           positionSorciere -= 2;
       }
   }
+  console.log(`Le griffon avance de ${deplacement} cases et arrive sur la case ${positionGriffon}`);
   
   return positionGriffon;
 }
